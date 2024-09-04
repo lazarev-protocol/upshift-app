@@ -1,10 +1,12 @@
 import { truncate } from '@/utils/helpers/string';
-import { explorerLink, type IPoolWithUnderlying } from '@augustdigital/sdk';
+import { explorerLink } from '@augustdigital/sdk';
+import type { IChainId, IPoolWithUnderlying } from '@augustdigital/sdk';
 import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { FALLBACK_CHAINID } from '@/utils/constants/web3';
+import { Chip } from '@mui/material';
 import LinkAtom from '../atoms/anchor-link';
 import AmountDisplay from '../atoms/amount-display';
 
@@ -32,7 +34,11 @@ export default function VaultInfo(
             ) : (
               <LinkAtom
                 overflow="hidden"
-                href={explorerLink(props?.address, FALLBACK_CHAINID, 'address')}
+                href={explorerLink(
+                  props?.address,
+                  (props?.chainId as IChainId) || FALLBACK_CHAINID,
+                  'address',
+                )}
               >
                 {truncate(props?.address, 6)}
               </LinkAtom>
@@ -53,7 +59,7 @@ export default function VaultInfo(
                 overflow="hidden"
                 href={explorerLink(
                   props?.loansOperator,
-                  FALLBACK_CHAINID,
+                  (props?.chainId as IChainId) || FALLBACK_CHAINID,
                   'address',
                 )}
               >
@@ -101,11 +107,27 @@ export default function VaultInfo(
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography>Performance Fee</Typography>
+            <Typography>Withdrawal Fee</Typography>
             {props?.loading ? (
               <Skeleton variant="text" width={75} />
             ) : (
-              <AmountDisplay>{`0.00%`}</AmountDisplay>
+              <Typography fontFamily={'monospace'} display="flex">
+                {props?.withdrawalFee?.raw === BigInt(0) ? (
+                  <Chip
+                    label={'None'}
+                    color={'success'}
+                    variant="outlined"
+                    size="small"
+                  />
+                ) : (
+                  <>
+                    <AmountDisplay
+                      round
+                    >{`${(Number(props?.withdrawalFee?.normalized) / 100).toFixed(2) || `0.00`}`}</AmountDisplay>
+                    %
+                  </>
+                )}
+              </Typography>
             )}
           </Stack>
         </Grid>
