@@ -18,6 +18,7 @@ import AmountDisplay from '../atoms/amount-display';
 import TableMolecule from '../molecules/table';
 import PoolActionsMolecule from './actions-pool';
 import AssetDisplay from '../atoms/asset-display';
+import Background from '../atoms/background';
 
 const columns: readonly IColumn[] = [
   { id: 'name', value: 'Name', minWidth: 180 },
@@ -34,24 +35,26 @@ const columns: readonly IColumn[] = [
       if (!children)
         return (
           <TableCell>
-            <Skeleton variant="text" height={36} />
+            <Skeleton variant="circular" height={36} width={36} />
           </TableCell>
         );
       return (
         <TableCell>
           <Stack justifyContent={'center'}>
-            <Tooltip
-              title={getChainNameById(children?.[0])}
-              arrow
-              placement="top"
-            >
-              <Image
-                src={`/chains/${children?.[0] && children?.[0] !== '-' ? children[0] : FALLBACK_CHAINID}.svg`}
-                alt={children?.[0]}
-                height={20}
-                width={20}
-              />
-            </Tooltip>
+            <Background color="white" variant="circular">
+              <Tooltip
+                title={getChainNameById(children?.[0])}
+                arrow
+                placement="top"
+              >
+                <Image
+                  src={`/chains/${children?.[0] && children?.[0] !== '-' ? children[0] : FALLBACK_CHAINID}.svg`}
+                  alt={children?.[0]}
+                  height={22}
+                  width={22}
+                />
+              </Tooltip>
+            </Background>
           </Stack>
         </TableCell>
       );
@@ -135,7 +138,7 @@ const columns: readonly IColumn[] = [
             <div onClick={(e) => e.stopPropagation()}>
               <AssetDisplay
                 img={`/assets/tokens/${children.symbol}.png`}
-                imgSize={18}
+                imgSize={20}
                 symbol={children.symbol}
                 address={children.address}
                 chainId={children?.chain}

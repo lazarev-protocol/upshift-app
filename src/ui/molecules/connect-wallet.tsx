@@ -187,7 +187,7 @@ const ConnectWalletMolecule = ({
       </List>
 
       <FormControlLabel
-        sx={{ mb: 1 }}
+        sx={{ my: 1, pl: 1 }}
         control={
           <Checkbox
             checked={agreeToTerms}
@@ -222,7 +222,8 @@ const ConnectWalletMolecule = ({
         size="large"
         variant="contained"
         color="primary"
-        startIcon={connectPending ? <CircularProgress size={24} /> : null}
+        sx={{ mt: 1 }}
+        startIcon={connectPending ? <CircularProgress size={20} /> : null}
       >
         {connectPending ? 'Connecting...' : 'Connect'}
       </Button>
